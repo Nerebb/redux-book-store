@@ -1,12 +1,10 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import bookSlice from "./bookSlice";
-import favoritesSlice from "./favoriteSlice";
 
 const store = configureStore({
-  reducer: combineReducers({
+  reducer: {
     booksReducer: bookSlice.reducer,
-    favoriteReducer: favoritesSlice.reducer,
-  }),
+  },
 });
 
 export default store;

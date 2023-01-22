@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 const PaginationBar = ({ pageNum, setPageNum, totalPageNum }) => {
   const dispatch = useDispatch();
-  const handleChange = (event, value) => {
+  const handleChange = (value) => {
     dispatch(setPageNum(value));
   };
   return (

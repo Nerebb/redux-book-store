@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Button,
@@ -14,31 +14,36 @@ import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { getFavoritesBooks, removeBookFromFav } from "../feature/favoriteSlice";
+import {
+  getFavoritesBooks,
+  RemoveBook,
+  removeBookFromFav,
+  setBookStatus,
+} from "../feature/bookSlice";
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const ReadingPage = () => {
-  // const [books, setBooks] = useState([]);
-  const [removedBookId, setRemovedBookId] = useState("");
   const navigate = useNavigate();
-
-  const { books, status } = useSelector((state) => state.favoriteReducer);
+  const { favoritesBook, bookDetail, status } = useSelector(
+    (state) => state.booksReducer
+  );
   const dispatch = useDispatch();
 
   const handleClickBook = (bookId) => {
     navigate(`/books/${bookId}`);
   };
 
-  const removeBook = (bookId) => {
-    setRemovedBookId(bookId);
+  const removeBook = (book) => {
+    dispatch(setBookStatus({ type: RemoveBook, book }));
   };
 
+  console.log("bookDetail", bookDetail);
   useEffect(() => {
-    if (!removedBookId) return;
-    dispatch(removeBookFromFav(removedBookId));
+    if (status !== RemoveBook) return;
+    dispatch(removeBookFromFav(bookDetail.id));
     toast.success("The book has been removed");
-  }, [dispatch, removedBookId]);
+  }, [dispatch, bookDetail, status]);
 
   useEffect(() => {
     dispatch(getFavoritesBooks());
@@ -60,7 +65,7 @@ const ReadingPage = () => {
           justifyContent="space-around"
           flexWrap={"wrap"}
         >
-          {books.map((book) => (
+          {favoritesBook.map((book) => (
             <Card
               key={book.id}
               sx={{
@@ -94,7 +99,7 @@ const ReadingPage = () => {
                       minWidth: "1.5rem",
                     }}
                     size="small"
-                    onClick={() => removeBook(book.id)}
+                    onClick={() => removeBook(book)}
                   >
                     &times;
                   </Button>

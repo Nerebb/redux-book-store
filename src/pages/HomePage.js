@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
 import PaginationBar from "../components/PaginationBar";
@@ -17,19 +17,18 @@ import {
   CardContent,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getBooks, setPageNum } from "../feature/bookSlice";
+import { getBooks, setPageNum, setQuery } from "../feature/bookSlice";
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const HomePage = () => {
-  const [query, setQuery] = useState("");
-
   const navigate = useNavigate();
   const handleClickBook = (bookId) => {
     navigate(`/books/${bookId}`);
+    dispatch(setQuery(""));
   };
 
-  const { books, status, pageNum, totalPage } = useSelector(
+  const { books, status, query, pageNum, totalPage } = useSelector(
     (state) => state.booksReducer
   );
   const errorMessage = useSelector((state) => state.booksReducer.error);
@@ -48,7 +47,7 @@ const HomePage = () => {
   });
   const { handleSubmit } = methods;
   const onSubmit = (data) => {
-    setQuery(data.searchQuery);
+    dispatch(setQuery(data.searchQuery));
   };
   return (
     <Container>

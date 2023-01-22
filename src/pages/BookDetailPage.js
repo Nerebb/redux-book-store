@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Container, Button, Box, Grid, Stack, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookDetail } from "../feature/bookSlice";
-import { addBookToFav } from "../feature/favoriteSlice";
+import { AddBook, addBookToFav, getBookDetail, setBookStatus } from "../feature/bookSlice";
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
 const BookDetailPage = () => {
-  const [addingBook, setAddingBook] = useState(false);
   const params = useParams();
   const bookId = params.id;
 
-  const { book, status } = useSelector((state) => state.booksReducer);
+  const { bookDetail, status } = useSelector(
+    (state) => state.booksReducer
+  );
   const dispatch = useDispatch();
 
-  const addToReadingList = (book) => {
-    setAddingBook(book);
-  };
-
   useEffect(() => {
-    if (!addingBook) return;
-    dispatch(addBookToFav(addingBook));
+    if (status !== AddBook) return;
+    dispatch(addBookToFav(bookDetail));
     toast.success("The book has been added to the reading list!");
-  }, [dispatch, addingBook]);
+  }, [dispatch, status, bookDetail]);
 
   useEffect(() => {
     dispatch(getBookDetail(bookId));
@@ -46,37 +42,37 @@ const BookDetailPage = () => {
           sx={{ border: "1px solid black" }}
         >
           <Grid item md={4}>
-            {book && (
+            {bookDetail && (
               <img
                 width="100%"
-                src={`${BACKEND_API}/${book.imageLink}`}
+                src={`${BACKEND_API}/${bookDetail.imageLink}`}
                 alt=""
               />
             )}
           </Grid>
           <Grid item md={8}>
-            {book && (
+            {bookDetail && (
               <Stack>
-                <h2>{book.title}</h2>
+                <h2>{bookDetail.title}</h2>
                 <Typography variant="body1">
-                  <strong>Author:</strong> {book.author}
+                  <strong>Author:</strong> {bookDetail.author}
                 </Typography>
                 <Typography variant="body1">
-                  <strong>Year:</strong> {book.year}
+                  <strong>Year:</strong> {bookDetail.year}
                 </Typography>
                 <Typography variant="body1">
-                  <strong>Country:</strong> {book.country}
+                  <strong>Country:</strong> {bookDetail.country}
                 </Typography>
                 <Typography variant="body1">
-                  <strong>Pages:</strong> {book.pages}
+                  <strong>Pages:</strong> {bookDetail.pages}
                 </Typography>
                 <Typography variant="body1">
-                  <strong>Language:</strong> {book.language}
+                  <strong>Language:</strong> {bookDetail.language}
                 </Typography>
                 <Button
                   variant="outlined"
                   sx={{ width: "fit-content" }}
-                  onClick={() => addToReadingList(book)}
+                  onClick={() => dispatch(setBookStatus({type:AddBook}))}
                 >
                   Add to Reading List
                 </Button>
