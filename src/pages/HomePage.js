@@ -7,7 +7,6 @@ import { FormProvider } from "../form";
 import { useForm } from "react-hook-form";
 import {
   Container,
-  Alert,
   Box,
   Card,
   Stack,
@@ -32,6 +31,10 @@ const HomePage = () => {
     (state) => state.booksReducer
   );
   const errorMessage = useSelector((state) => state.booksReducer.error);
+  console.log(
+    "🚀 ~ file: HomePage.js:35 ~ HomePage ~ errorMessage",
+    typeof errorMessage
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -55,7 +58,6 @@ const HomePage = () => {
         <Typography variant="h3" sx={{ textAlign: "center" }}>
           Book Store
         </Typography>
-        {errorMessage && <Alert severity="danger">{errorMessage}</Alert>}
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Stack
             spacing={2}

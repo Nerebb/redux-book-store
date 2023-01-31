@@ -42,7 +42,7 @@ const ReadingPage = () => {
   useEffect(() => {
     if (status !== RemoveBook) return;
     dispatch(removeBookFromFav(bookDetail.id));
-    toast.success("The book has been removed");
+    toast.error("The book has been removed");
   }, [dispatch, bookDetail, status]);
 
   useEffect(() => {

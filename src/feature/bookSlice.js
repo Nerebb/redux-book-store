@@ -13,6 +13,7 @@ const defaultData = {
   pageNum: 1,
   limit: 10,
   totalPage: 10,
+  error: "",
 };
 
 export const getBooks = createAsyncThunk(
@@ -95,7 +96,7 @@ const bookSlice = createSlice({
       })
       .addCase(getBooks.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = "Cannot get data";
       });
     builder
       .addCase(getBookDetail.pending, (state) => {
@@ -107,7 +108,7 @@ const bookSlice = createSlice({
       })
       .addCase(getBookDetail.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = "Cannot get data";
       });
     builder
       .addCase(getFavoritesBooks.pending, (state) => {
@@ -115,11 +116,11 @@ const bookSlice = createSlice({
       })
       .addCase(getFavoritesBooks.fulfilled, (state, action) => {
         state.status = "idle";
-        state.books = action.payload;
+        state.favoritesBook = action.payload;
       })
       .addCase(getFavoritesBooks.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = "Cannot get data";
       });
     builder
       .addCase(addBookToFav.pending, (state) => {
@@ -131,7 +132,7 @@ const bookSlice = createSlice({
       })
       .addCase(addBookToFav.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = "Cannot get data";
       });
     builder
       .addCase(removeBookFromFav.pending, (state) => {
@@ -139,11 +140,11 @@ const bookSlice = createSlice({
       })
       .addCase(removeBookFromFav.fulfilled, (state, action) => {
         state.status = "idle";
-        state.books = state.books.filter((i) => i.id !== action.payload);
+        state.favoritesBook = state.favoritesBook.filter((i) => i.id !== action.payload);
       })
       .addCase(removeBookFromFav.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = "Cannot get data";
       });
   },
 });
